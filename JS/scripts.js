@@ -48,7 +48,11 @@ function addNewElementToList(title   /* Title, author, id */) {
   //obsługa dodawanie elementów do listy
   // $list.appendChild(createElement('nowy', 2))
   const newElement = createElement(title);
+<<<<<<< HEAD
   $list.appendChild(newElement);
+=======
+  $list.appendChild(newElement).appendChild(delBtn);
+>>>>>>> 2883cc4d2dc868dd3c5093e9bd24cb917ed3ed3c
 };
 
 function createElement(title /* Title, author, id */) {
