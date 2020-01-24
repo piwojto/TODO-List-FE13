@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
+    <title>Todo List</title>
+  </head>
+  <body>
+    <div class="container">
+      <form id="addForm" class="header">
+        <h2>My ToDo List</h2>
+        <input type="text" id="myInput" placeholder="new task...">
+        <button id="addTodo"> Add </button>
+      </form>
+        
+      <ul id="list">
+        <li>
+          pierwszy element todo listy
+          <button id="delBtn" class="delete">Delete</button>
+          <button id="editBtn" class="edit">Edit</button>
+          <button id="doneBtn" class="done">Mark as done</button>
+        </li>
+        <li>
+          <label> iqoi oi oioi oqi o oijoijoi oioi oio i </label>
+          <button id="delBtn" class="delete">Delete</button>
+          <button id="editBtn" class="edit">Edit</button>
+          <button id="doneBtn" class="done">Mark as done</button>
+        </li>
+      </ul>
+
+      <div id="myModal" class="modal">  <!-- edit - modal box -->
+      tutaj modal
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span id="closePopup" class="close">&times;</span>
+          <div>
+            <input type="text" id="popupInput" placeholder="Title...">
+            <button id="cancelTodo" class="addBtn">CANCEL</button>
+            <button id="acceptTodo" class="addBtn">OK</button>
+          </div>
+        </div>
+
+      </div>
+  </div>
+    <script src="JS/scripts.js"></script>
+  </body>
+</html>
