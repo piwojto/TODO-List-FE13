@@ -48,9 +48,7 @@ function addNewElementToList(title   /* Title, author, id */) {
   //obsługa dodawanie elementów do listy
   // $list.appendChild(createElement('nowy', 2))
   const newElement = createElement(title);
-  $list.appendChild(newElement).appendChild(delBtn);
-  // $list.insertAdjacentHTML('beforeend',editBtn);
-  // $list.appendChild(editBtn).appendChild(doneBtn); 
+  $list.appendChild(newElement);
 };
 
 function createElement(title /* Title, author, id */) {
@@ -67,14 +65,12 @@ function createElement(title /* Title, author, id */) {
   delBtn.className = "delete";
   doneBtn.innerText = "Mark as Done";      
   doneBtn.className = "done"; 
-  label.innerText = input.value;
+  // document.getElementsByTagName('label').innerHTML = input.value;
+  label.innertext = input.value;
   console.log(label.innerText);
-  // newElement.appendChild(label);         //
-  // newElement.appendChild(editInput);     //
-  // newElement.appendChild(editBtn);    //
-  // newElement.appendChild(delBtn);  
   newElement.innerText = title;
   console.log(newElement);
+  newElement.append(label,delBtn,editBtn,doneBtn);
   return newElement;
 };
 

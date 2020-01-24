@@ -52,6 +52,13 @@ label {
 
 }
 
+span {
+  /* display: inline-block; */
+  overflow: hidden;
+  width: 70%;
+
+}
+
 button {
   /* margin-left: 1rem;; */
   font-size: 1rem;
