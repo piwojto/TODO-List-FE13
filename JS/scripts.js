@@ -1,9 +1,8 @@
 // Tutaj dodacie zmienne globalne do przechowywania elementów takich jak np. lista czy input do wpisywania nowego todo
-let $list, addBtn, editBtn, delBtn, doneBtn, label, input, divModal, popInput, todoID, currentID, tempLabel;
+let $list, addBtn, editBtn, delBtn, doneBtn, label, input, divModal, popInput, currentTODO, tempLabel;
 
 const initialList = ['Dzisiaj robię sprzątanie', 'Nakarm rybki', 
   'Podlej kwiatki w doniczkach'];
-todoID=1;
 
 function main() {
   prepareDOMElements();
@@ -33,8 +32,6 @@ function prepareDOMEvents() {
     event.preventDefault(); 
     console.log(input.value);
     if(input.value.trim()!=='') {
-      
-      // console.log(label);
       createElement(input.value);
       addNewElementToList(input.value);
     };  
@@ -42,21 +39,18 @@ function prepareDOMEvents() {
 
   cancTodo.addEventListener('click', function(event) {
     event.preventDefault(); 
-    console.log(input.value);
     closePopup(event);
   });
 
   acceTodo.addEventListener('click', function(event) {
     event.preventDefault(); 
-    console.log(popInput.value);
-    console.log(event.target.parentElement.firstChild.textContent);
+    currentTODO.innerText=popInput.value;
     closePopup(event);
     });
 };
 
 function prepareInitialList() {
   // Tutaj utworzymy sobie początkowe todosy. Mogą pochodzić np. z tablicy
- 
   initialList.forEach(todo => {
     addNewElementToList(todo);
   });
@@ -65,7 +59,6 @@ function prepareInitialList() {
 function addNewElementToList(title   /* Title, author, id */) {
   //obsługa dodawanie elementów do listy
   const newElement = createElement(title);
-  todoID++;
   $list.appendChild(newElement);
   input.value='';
 };
@@ -85,7 +78,6 @@ function createElement(title /* Title, author, id */) {
   doneBtn.innerText = "Mark as Done";      
   doneBtn.className = "done"; 
   label.textContent = input.value || title;
-  newElement.dataset.id=todoID;
   newElement.append(label,delBtn,editBtn,doneBtn);
   return newElement;
 };
@@ -113,6 +105,7 @@ function listClickManager(event/* event- event.target */) { //obsługa zdarzeń 
 
 function openPopup(event) {
   divModal.classList.toggle("modal-active");
+  currentTODO = event.target.parentElement.firstChild;
   popInput.value=event.target.parentElement.firstChild.textContent;
   // Otwórz popup
 };
