@@ -1,7 +1,9 @@
 // Tutaj dodacie zmienne globalne do przechowywania elementów takich jak np. lista czy input do wpisywania nowego todo
-let $list, addBtn, editBtn, delBtn, doneBtn, label, input;
+let $list, addBtn, editBtn, delBtn, doneBtn, label, input, divModal, popInput, todoID, currentID, tempLabel;
+
 const initialList = ['Dzisiaj robię sprzątanie', 'Nakarm rybki', 
-  'Podlej kwiatki w doniczkach', 'próba todo listy '];
+  'Podlej kwiatki w doniczkach'];
+todoID=1;
 
 function main() {
   prepareDOMElements();
@@ -14,19 +16,21 @@ function prepareDOMElements() {
   $list = document.getElementById('list');
   input=document.querySelector('#myInput'); 
   addBtn=document.querySelector('#addTodo'); 
-
+  divModal=document.querySelector('#myModal'); 
+  popInput=document.querySelector('#popupInput');
+  cancTodo=document.querySelector('#cancelTodo');
+  acceTodo=document.querySelector('#acceptTodo');
 };
 
 function prepareDOMEvents() {
   // Przygotowanie listenerów
   $list.addEventListener('click', listClickManager);
   input.addEventListener('focus', function(event) {
-    event.preventDefault(); // stop execute event
-  // console.log(input.value);
+      event.preventDefault(); // cancel event
   });
 
   addBtn.addEventListener('click', function(event) {
-      event.preventDefault(); // stop execute event
+    event.preventDefault(); 
     console.log(input.value);
     if(input.value.trim()!=='') {
       
@@ -35,10 +39,24 @@ function prepareDOMEvents() {
       addNewElementToList(input.value);
     };  
  });
+
+  cancTodo.addEventListener('click', function(event) {
+    event.preventDefault(); 
+    console.log(input.value);
+    closePopup(event);
+  });
+
+  acceTodo.addEventListener('click', function(event) {
+    event.preventDefault(); 
+    console.log(popInput.value);
+    console.log(event.target.parentElement.firstChild.textContent);
+    closePopup(event);
+    });
 };
 
 function prepareInitialList() {
   // Tutaj utworzymy sobie początkowe todosy. Mogą pochodzić np. z tablicy
+ 
   initialList.forEach(todo => {
     addNewElementToList(todo);
   });
@@ -46,13 +64,10 @@ function prepareInitialList() {
 
 function addNewElementToList(title   /* Title, author, id */) {
   //obsługa dodawanie elementów do listy
-  // $list.appendChild(createElement('nowy', 2))
   const newElement = createElement(title);
-<<<<<<< HEAD
+  todoID++;
   $list.appendChild(newElement);
-=======
-  $list.appendChild(newElement).appendChild(delBtn);
->>>>>>> 2883cc4d2dc868dd3c5093e9bd24cb917ed3ed3c
+  input.value='';
 };
 
 function createElement(title /* Title, author, id */) {
@@ -62,18 +77,15 @@ function createElement(title /* Title, author, id */) {
   editBtn = document.createElement('button');   
   delBtn = document.createElement("button");
   doneBtn = document.createElement("button");
-  label = document.createElement('label'); 
+  label = document.createElement('label');
   editBtn.innerText = "Edit";      
   editBtn.className = "edit";      
   delBtn.innerText = "Delete"; 
   delBtn.className = "delete";
   doneBtn.innerText = "Mark as Done";      
   doneBtn.className = "done"; 
-  // document.getElementsByTagName('label').innerHTML = input.value;
-  label.innertext = input.value;
-  console.log(label.innerText);
-  newElement.innerText = title;
-  console.log(newElement);
+  label.textContent = input.value || title;
+  newElement.dataset.id=todoID;
   newElement.append(label,delBtn,editBtn,doneBtn);
   return newElement;
 };
@@ -82,39 +94,41 @@ function listClickManager(event/* event- event.target */) { //obsługa zdarzeń 
   // Rozstrzygnięcie co dokładnie zostało kliknięte i wywołanie odpowiedniej funkcji
   // event.target.parentElement.id
   switch (event.target.className) {
+    case 'delete': {
+      console.log('klik delete');
+      elemRemove(event);
+      break;
+    }
     case 'edit': {
       console.log('klik edit');
-      openPopup();
+      openPopup(event);
       break;
-    }
-    case 'delete': {
-        console.log('klik delete');
-        elemRemove();
-        break;
     }
     case 'done': {
-      console.log('klik done');
+      elemDone(event);
       break;
+    }
   }
-  }
-  // if (event.target.className === 'edit') {
-    // console.log('klik edit');
-    //  editListElement(id)
-    //  }
 };
 
-function openPopup() {
-
+function openPopup(event) {
+  divModal.classList.toggle("modal-active");
+  popInput.value=event.target.parentElement.firstChild.textContent;
   // Otwórz popup
 };
 
-function closePopup() {
+function closePopup(event) {
   // Zamknij popup
+  divModal.classList.toggle("modal-active");
 };
 
-function elemRemove() {
-  console.log($list); 
+function elemRemove(event) {
+  event.target.parentElement.remove();
+};
 
+function elemDone(event) {
+  event.target.setAttribute("disabled",true);
+  event.target.parentElement.firstChild.classList.add("task-done")
 };
 
 document.addEventListener('DOMContentLoaded', main);
