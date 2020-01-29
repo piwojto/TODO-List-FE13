@@ -1,5 +1,6 @@
 // Tutaj dodacie zmienne globalne do przechowywania elementów takich jak np. lista czy input do wpisywania nowego todo
-let $list, addBtn, editBtn, delBtn, doneBtn, label, input, divModal, popInput, currentTODO, tempLabel;
+let $list, addBtn, editBtn, delBtn, doneBtn, label, input, divModal, 
+  popInput, closePop, currentTODO, tempLabel;
 
 const initialList = ['Dzisiaj robię sprzątanie', 'Nakarm rybki', 
   'Podlej kwiatki w doniczkach'];
@@ -19,35 +20,37 @@ function prepareDOMElements() {
   popInput=document.querySelector('#popupInput');
   cancTodo=document.querySelector('#cancelTodo');
   acceTodo=document.querySelector('#acceptTodo');
+  closePop=document.querySelector('#closePopup');
 };
 
 function prepareDOMEvents() {
   // Przygotowanie listenerów
   $list.addEventListener('click', listClickManager);
   input.addEventListener('focus', function(event) {
-      event.preventDefault(); // cancel event
   });
 
-  addBtn.addEventListener('click', function(event) {
+  event.target.addEventListener('click', function(event) {
     event.preventDefault(); 
-    console.log(input.value);
-    if(input.value.trim()!=='') {
-      createElement(input.value);
-      addNewElementToList(input.value);
-    };  
- });
-
-  cancTodo.addEventListener('click', function(event) {
-    event.preventDefault(); 
-    closePopup(event);
-  });
-
-  acceTodo.addEventListener('click', function(event) {
-    event.preventDefault(); 
-    currentTODO.innerText=popInput.value;
-    closePopup(event);
-    });
-};
+    switch (event.target.id) {
+      case 'addTodo': {
+        if(input.value.trim()!=='') {
+          createElement(input.value);
+          addNewElementToList(input.value);
+        };  
+        break;
+      }
+      case 'cancelTodo':
+      case 'closePopup': {
+        closePopup(event);
+        break;
+      }
+      case 'acceptTodo': {
+        currentTODO.innerText=popInput.value;
+        closePopup(event);
+        break;
+      }
+    };
+})};
 
 function prepareInitialList() {
   // Tutaj utworzymy sobie początkowe todosy. Mogą pochodzić np. z tablicy
@@ -67,16 +70,18 @@ function createElement(title /* Title, author, id */) {
   // Tworzyc reprezentacje DOM elementu return newElement
   // return newElement
   const newElement = document.createElement('li');
-  editBtn = document.createElement('button');   
-  delBtn = document.createElement("button");
-  doneBtn = document.createElement("button");
+  
+  function createListButtons(text, className) {
+    let button=document.createElement('button');
+    button.innerText=text;
+    button.className=className;
+    return button;
+  };
+
+  editBtn = createListButtons('Edit','edit');   
+  delBtn = createListButtons('Delete','delete');
+  doneBtn = createListButtons('Mark as Done','done');
   label = document.createElement('label');
-  editBtn.innerText = "Edit";      
-  editBtn.className = "edit";      
-  delBtn.innerText = "Delete"; 
-  delBtn.className = "delete";
-  doneBtn.innerText = "Mark as Done";      
-  doneBtn.className = "done"; 
   label.textContent = input.value || title;
   newElement.append(label,delBtn,editBtn,doneBtn);
   return newElement;
@@ -87,12 +92,10 @@ function listClickManager(event/* event- event.target */) { //obsługa zdarzeń 
   // event.target.parentElement.id
   switch (event.target.className) {
     case 'delete': {
-      console.log('klik delete');
       elemRemove(event);
       break;
     }
     case 'edit': {
-      console.log('klik edit');
       openPopup(event);
       break;
     }
@@ -104,14 +107,15 @@ function listClickManager(event/* event- event.target */) { //obsługa zdarzeń 
 };
 
 function openPopup(event) {
+    // Otwórz popup
   divModal.classList.toggle("modal-active");
   currentTODO = event.target.parentElement.firstChild;
   popInput.value=event.target.parentElement.firstChild.textContent;
-  // Otwórz popup
 };
 
 function closePopup(event) {
   // Zamknij popup
+  console.log(event.target);
   divModal.classList.toggle("modal-active");
 };
 
